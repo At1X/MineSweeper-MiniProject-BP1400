@@ -2,6 +2,8 @@ import random
 import sys
 import time 
 import os
+from getpass import getpass
+
 def loadingAnimation():
     animation = "|/-\\"
 
@@ -158,167 +160,469 @@ def makeMapByList(madeMapList,mapSize):
             print('--------'*(mapSize))
             print(*i)
     return '***********\nPlease type your choice...'
-
-clearConsole()
-
-print('Welcome to the game, please select one these maps to play:\n1- Small (type s)\n2- Medium (type m)\n3- Large (type l)')
-
-while 'IM ALIVE': 
-    mapSizeStr = input()
-    if mapSizeStr == 's':
-        mapSize = 9
-        break
-    elif mapSizeStr == 'm':
-        mapSize = 12
-        break
-    elif mapSizeStr == 'l':
-        mapSize = 15
-        break
-    else:
-        print('No valid input, try again')
-if mapSize == 9:
-    tedadKolParchamHa = 10
-elif mapSize == 12:
-    tedadKolParchamHa = 20
-else:
-    tedadKolParchamHa = 40
-print('\t\t*\/ Tedad parcham haye shoma: {} *\/'.format(tedadKolParchamHa))
-print(mapShow(mapSize))
-bombs = bombPutter(mapSize)
-print(bombs)
-myMap = makeMap(mapSize)
-SecLL = []
-nium = 0
-nium2 = 0
-
-while 'IM ALIVE':
-    userChoiceInput = input().split()
-    if userChoiceInput[0].isdigit():
-        if (int(userChoiceInput[0]) in bombs) and userChoiceInput[1] == 'L':
-            print('You Lost!')
+def playgame():
+    clearConsole()
+    print('Welcome to the game, please select one these maps to play:\n1- Small (type s)\n2- Medium (type m)\n3- Large (type l)')
+    while 'IM ALIVE': 
+        mapSizeStr = input()
+        if mapSizeStr == 's':
+            mapSize = 9
             break
-        elif ((int(userChoiceInput[0]) in bombs) or (int(userChoiceInput[0]) not in bombs)) and userChoiceInput[1] == 'R':
-            print('| '+userChoiceInput[0]+' |')
-            # print(makeMap(mapSize))
-            for i in myMap:
-                for j in i:
-                    if j == '| '+userChoiceInput[0]+' |':
-                        if nium == 0:
-                            makeMap(mapSize)
-                            nium+=1
-                        else:
-                            makeMapByList(ll,mapSize)
-                        ll[myMap.index(i)][i.index(j)] = '|  \u2690  |'
-                        tedadKolParchamHa-=1
-                        # clearConsole()
-                        print('\t\t*\/ Tedaded parcham haye baghi mande: {} *\/'.format(tedadKolParchamHa))
-                        print(makeMapByList(ll,mapSize))
-        elif (int(userChoiceInput[0]) not in bombs) and userChoiceInput[1] == 'L':
-            numBomb = 0
-            NUM = int(userChoiceInput[0])
-            if nium == 0:
-                makeMap(mapSize)
-                nium+=1
-            else:
-                makeMapByList(ll,mapSize)
-            if mapSize == 9:
-                if NUM in [102,103,104,105,106,107,108]:
-                    bombCounter = [NUM+1,NUM-1,NUM+mapSize,NUM+mapSize+1,NUM+mapSize-1]
-                    for bomb in bombCounter:
-                        if bomb in bombs:
-                            numBomb+=1
-                    for i in myMap:
-                        for j in i:
-                            if j == '| '+str(NUM)+' |':
-                                ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
-                                print(makeMapByList(ll,mapSize))            
-                elif NUM in [174,175,176,177,178,179,180]:
-                    bombCounter = [NUM+1,NUM-1,NUM-mapSize,NUM-mapSize-1,NUM-mapSize+1]
-                    for bomb in bombCounter:
-                        if bomb in bombs:
-                            numBomb+=1
-                    for i in myMap:
-                        for j in i:
-                            if j == '| '+str(NUM)+' |':
-                                ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
-                                print(makeMapByList(ll,mapSize))
-                elif NUM in [110,119,128,137,146,155,164]:
-                    bombCounter = [NUM+1,NUM+mapSize,NUM-mapSize,NUM+mapSize+1,NUM-mapSize+1]
-                    for bomb in bombCounter:
-                        if bomb in bombs:
-                            numBomb+=1
-                    for i in myMap:
-                        for j in i:
-                            if j == '| '+str(NUM)+' |':
-                                ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
-                                print(makeMapByList(ll,mapSize))           
-                elif NUM in [118,127,136,145,154,163,172]:
-                    bombCounter = [NUM-1,NUM+mapSize,NUM-mapSize,NUM-mapSize-1,NUM+mapSize-1]
-                    for bomb in bombCounter:
-                        if bomb in bombs:
-                            numBomb+=1
-                    for i in myMap:
-                        for j in i:
-                            if j == '| '+str(NUM)+' |':
-                                ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
-                                print(makeMapByList(ll,mapSize))            
-                elif NUM is 101:
-                    bombCounter = [NUM+1,NUM+mapSize,NUM+mapSize+1]
-                    for bomb in bombCounter:
-                        if bomb in bombs:
-                            numBomb+=1
-                    for i in myMap:
-                        for j in i:
-                            if j == '| '+str(NUM)+' |':
-                                ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
-                                print(makeMapByList(ll,mapSize))            
-                elif NUM is 109:
-                    bombCounter = [NUM-1,NUM+mapSize,NUM+mapSize-1]
-                    for bomb in bombCounter:
-                        if bomb in bombs:
-                            numBomb+=1
-                    for i in myMap:
-                        for j in i:
-                            if j == '| '+str(NUM)+' |':
-                                ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
-                                print(makeMapByList(ll,mapSize))
-                elif NUM is 173:
-                    bombCounter = [NUM+1,NUM-mapSize,NUM-mapSize+1]
-                    for bomb in bombCounter:
-                        if bomb in bombs:
-                            numBomb+=1
-                    for i in myMap:
-                        for j in i:
-                            if j == '| '+str(NUM)+' |':
-                                ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
-                                print(makeMapByList(ll,mapSize))            
-                elif NUM is 181:
-                    bombCounter = [NUM-1,NUM-mapSize,NUM-mapSize-1]
-                    for bomb in bombCounter:
-                        if bomb in bombs:
-                            numBomb+=1
-                    for i in myMap:
-                        for j in i:
-                            if j == '| '+str(NUM)+' |':
-                                ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
-                                print(makeMapByList(ll,mapSize))
-                else:
-                    bombCounter = [NUM+1,NUM-1,NUM+mapSize,NUM-mapSize,NUM+mapSize+1,NUM-mapSize-1,NUM+mapSize-1,NUM-mapSize+1]
-                    for bomb in bombCounter:
-                        if bomb in bombs:
-                            numBomb+=1
-                    for i in myMap:
-                        for j in i:
-                            if j == '| '+str(NUM)+' |':
-                                ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
-                                print(makeMapByList(ll,mapSize))
-            elif mapSize == 12:
-                pass
-            else:
-                pass
+        elif mapSizeStr == 'm':
+            mapSize = 12
+            break
+        elif mapSizeStr == 'l':
+            mapSize = 15
+            break
         else:
-            print('no valid input, try again...')
+            print('No valid input, try again')
+    if mapSize == 9:
+        tedadKolParchamHa = 10
+    elif mapSize == 12:
+        tedadKolParchamHa = 20
     else:
-        print('Your input must be a number and a letter, try again...')
-# print(makeMap(mapSize))
+        tedadKolParchamHa = 40
+    print('\t\t*\/ Tedad parcham haye shoma: {} *\/'.format(tedadKolParchamHa))
+    print(mapShow(mapSize))
+    bombs = bombPutter(mapSize)
+    print(bombs)
+    myMap = makeMap(mapSize)
+    nium = 0
+    numberOfFoundedBombs = 0
+    kams = 0
+    foundedBombs = []
+    while 'IM ALIVE':
+        userChoiceInput = input().split()
+        if userChoiceInput[0].isdigit():
+            if (int(userChoiceInput[0]) in bombs) and userChoiceInput[1] == 'L':
+                print('You Lost!')
+                break
+            elif ((int(userChoiceInput[0]) in bombs) or (int(userChoiceInput[0]) not in bombs)) and userChoiceInput[1] == 'R':
+                print('| '+userChoiceInput[0]+' |')
+                # print(makeMap(mapSize))
+                for i in myMap:
+                    for j in i:
+                        if j == '| '+userChoiceInput[0]+' |':
+                            if nium == 0:
+                                makeMap(mapSize)
+                                nium+=1
+                            else:
+                                makeMapByList(ll,mapSize)
+                            ll[myMap.index(i)][i.index(j)] = '|  \u2690  |'
+                            tedadKolParchamHa-=1
+                            clearConsole()
+                            print('\t\t*\/ Tedaded parcham haye baghi mande: {} *\/'.format(tedadKolParchamHa))
+
+                            numberOfFoundedBombs+=1
+                            foundedBombs.append(int(userChoiceInput[0]))
+                            if len(bombs) == numberOfFoundedBombs:
+                                if set(bombs) == set(foundedBombs):
+                                    print('YOU WON!')
+                                    kams = 1
+                                    break
+                                
+                                else:
+                                    print('Your flags finished and you LOST!')
+                                    kams = 1
+                                    break
+                            else:
+                                print(makeMapByList(ll,mapSize))
+                    if kams == 1:
+                        break
+                if kams == 1:
+                    break
+            elif (int(userChoiceInput[0]) not in bombs) and userChoiceInput[1] == 'L':
+                clearConsole()
+                numBomb = 0
+                NUM = int(userChoiceInput[0])
+                if nium == 0:
+                    makeMap(mapSize)
+                    nium+=1
+                else:
+                    makeMapByList(ll,mapSize)
+                if mapSize == 9:
+                    if NUM in [102,103,104,105,106,107,108]:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-1,NUM+mapSize,NUM+mapSize+1,NUM+mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM in [174,175,176,177,178,179,180]:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-1,NUM-mapSize,NUM-mapSize-1,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                    elif NUM in [110,119,128,137,146,155,164]:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM+mapSize,NUM-mapSize,NUM+mapSize+1,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))           
+                    elif NUM in [118,127,136,145,154,163,172]:
+                        clearConsole()
+                        bombCounter = [NUM-1,NUM+mapSize,NUM-mapSize,NUM-mapSize-1,NUM+mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM is 101:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM+mapSize,NUM+mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM is 109:
+                        clearConsole()
+                        bombCounter = [NUM-1,NUM+mapSize,NUM+mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                    elif NUM is 173:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-mapSize,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM is 181:
+                        clearConsole()
+                        bombCounter = [NUM-1,NUM-mapSize,NUM-mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                    else:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-1,NUM+mapSize,NUM-mapSize,NUM+mapSize+1,NUM-mapSize-1,NUM+mapSize-1,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                elif mapSize == 12:
+                    if NUM in [102, 103, 104, 105, 106, 107, 108, 109, 110, 111,]:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-1,NUM+mapSize,NUM+mapSize+1,NUM+mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM in [234, 235, 236, 237, 238, 239, 240, 241, 242, 243 ]:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-1,NUM-mapSize,NUM-mapSize-1,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                    elif NUM in [113, 125, 137, 149, 161, 173, 185, 197, 209, 221]:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM+mapSize,NUM-mapSize,NUM+mapSize+1,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))           
+                    elif NUM in [124,136,148,160,172,184,196,208,220,232]:
+                        clearConsole()
+                        bombCounter = [NUM-1,NUM+mapSize,NUM-mapSize,NUM-mapSize-1,NUM+mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM is 101:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM+mapSize,NUM+mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM is 112:
+                        clearConsole()
+                        bombCounter = [NUM-1,NUM+mapSize,NUM+mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                    elif NUM is 233:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-mapSize,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM is 244:
+                        clearConsole()
+                        bombCounter = [NUM-1,NUM-mapSize,NUM-mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                    else:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-1,NUM+mapSize,NUM-mapSize,NUM+mapSize+1,NUM-mapSize-1,NUM+mapSize-1,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))               
+                else:
+                    if NUM in [102,103,104,105,106,107,108,109,110,111,112,113,114]:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-1,NUM+mapSize,NUM+mapSize+1,NUM+mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM in [387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399 ]:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-1,NUM-mapSize,NUM-mapSize-1,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                    elif NUM in [116, 131, 146, 161, 176, 191, 206, 221, 236, 251, 266, 281, 296, 311, 326, 341, 356, 371, 386 ]:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM+mapSize,NUM-mapSize,NUM+mapSize+1,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))           
+                    elif NUM in [160,175,190,205,220,235,250,265,280,295,310,325,340,355,370,385]:
+                        clearConsole()
+                        bombCounter = [NUM-1,NUM+mapSize,NUM-mapSize,NUM-mapSize-1,NUM+mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM is 101:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM+mapSize,NUM+mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM is 115:
+                        clearConsole()
+                        bombCounter = [NUM-1,NUM+mapSize,NUM+mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                    elif NUM is 386:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-mapSize,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))            
+                    elif NUM is 400:
+                        clearConsole()
+                        bombCounter = [NUM-1,NUM-mapSize,NUM-mapSize-1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                    else:
+                        clearConsole()
+                        bombCounter = [NUM+1,NUM-1,NUM+mapSize,NUM-mapSize,NUM+mapSize+1,NUM-mapSize-1,NUM+mapSize-1,NUM-mapSize+1]
+                        for bomb in bombCounter:
+                            if bomb in bombs:
+                                numBomb+=1
+                        for i in myMap:
+                            for j in i:
+                                if j == '| '+str(NUM)+' |':
+                                    ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
+                                    print(makeMapByList(ll,mapSize))
+                                    
+            else:
+                print('no valid input, try again...')
+        else:
+            print('Your input must be a number and a letter, try again...')
+def userLoginAndRegister():
+    global flag
+    global username
+    flag = False
+    while "IM ALIVE":
+        if flag:
+            break
+        print("Welcome,\ntype whatever you want:\n1- Register (R)\n2- Login (L)\n3- Back (B)")
+        if not os.path.isfile('database.txt'):
+            db = open('database.txt','w')
+            db.close()
+        usChoice = input()
+        if usChoice == 'R':
+            db = open('database.txt','a+')
+            while 1:
+                flag = False
+                username = input('Please enter your username:\n') 
+                password = getpass('Please enter your password:\n')
+                if len(username) >= 4 and len(password) >=8:
+                    db.write('{}\n'.format(username))
+                    db.write('{}\n'.format(password))
+                    flag = True
+                    clearConsole()
+                    break
+                else:
+                    print('username must more than 4 and password more than 8 characters')
+        elif usChoice == 'L':
+            flag = False
+            db = open('database.txt','r')
+            allUsers = db.readlines()
+            while flag == False:
+                username = input('Please enter your username:\n')
+                password = getpass("Please enter your password:\n")
+                for k in range(len(allUsers)):
+                    if allUsers[k] == '{}\n'.format(username):
+                        if (allUsers[k+1] == '{}\n'.format(password)) or (allUsers[k+1] == '{}'.format(password)):
+                            flag = True
+                            break
+        db.close()
+        return flag
+clearConsole()
+userLoginAndRegister()
+# Change Name and Play Game
+if flag:
+    clearConsole()
+    print('*** MENU ***')
+    print('select, to continue...\n1- Change Name (ch)\n2- Play (p)')
+    menuChoice = input()
+    if menuChoice == 'ch':
+        while 1:
+            newName = input('Enter your new name:\n')
+            if newName:
+                print(username)
+                break
+        with open('database.txt','r') as myFile:
+            lines = myFile.readlines()
+            for i in lines:
+                if i == '{}'.format(username) or i == '{}\n'.format(username):
+                    myIndx = lines.index(i)
+                    lines[myIndx] = '{}\n'.format(newName)
+                    print('your name has changed!')
+                    with open('database.txt','w') as secFile:
+                        for k in lines:
+                            secFile.write(k)
+    elif menuChoice == 'p':
+        playgame()
+        while 1:
+            print("*************")
+            print("What do you want to do now?")
+            print("*************\n1- Rematch (r)\n2- Exit (e)")
+            lastChoice = input()
+            if lastChoice == 'e':
+                print('Sho khosh!')
+                exit()
+            elif lastChoice == 'r':
+                playgame()
+
+
+
+
 
