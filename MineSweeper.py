@@ -1,9 +1,23 @@
-import random
-import sys
-import time 
-import os
+import random, smtplib, sys, time, os
 from getpass import getpass
-
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+def animatedLostText():
+    print("""
+    \ \ / / / _ \ | | | |      | |    / _ \ / __||_   _|
+     \   / | (_) || |_| |      | |__ | (_) |\__ \  | |  
+      |_|   \___/  \___/       |____| \___/ |___/  |_|  
+    """)
+def animatedWonText():
+    print("""                                                                      
+    ▀███▀   ▀██▀ ▄▄█▀▀██▄  ▀███▀   ▀███▀   ▀████▀     █     ▀███▀ ▄▄█▀▀██▄ ▀███▄   ▀███▀█ 
+      ███   ▄█ ▄██▀    ▀██▄ ██       █       ▀██     ▄██     ▄█ ▄██▀    ▀██▄ ███▄    █ ██ 
+       ███ ▄█  ██▀      ▀██ ██       █        ██▄   ▄███▄   ▄█  ██▀      ▀██ █ ███   █ ██ 
+        ████   ██        ██ ██       █         ██▄  █▀ ██▄  █▀  ██        ██ █  ▀██▄ █ ██ 
+         ██    ██▄      ▄██ ██       █         ▀██ █▀  ▀██ █▀   ██▄      ▄██ █   ▀██▄█ ▀▀ 
+         ██    ▀██▄    ▄██▀ ██▄     ▄█          ▄██▄    ▄██▄    ▀██▄    ▄██▀ █     ███ ▄▄ 
+       ▄████▄    ▀▀████▀▀    ▀██████▀▀           ██      ██       ▀▀████▀▀ ▄███▄    ██ ██
+                """)
 def loadingAnimation():
     animation = "|/-\\"
 
@@ -162,7 +176,7 @@ def makeMapByList(madeMapList,mapSize):
     return '***********\nPlease type your choice...'
 def playgame():
     clearConsole()
-    print('Welcome to the game, please select one these maps to play:\n1- Small (type s)\n2- Medium (type m)\n3- Large (type l)')
+    print('Welcome to the game, please select one these maps to play:\n1- Small (s)\n2- Medium (m)\n3- Large (l)')
     while 'IM ALIVE': 
         mapSizeStr = input()
         if mapSizeStr == 's':
@@ -195,7 +209,8 @@ def playgame():
         userChoiceInput = input().split()
         if userChoiceInput[0].isdigit():
             if (int(userChoiceInput[0]) in bombs) and userChoiceInput[1] == 'L':
-                print('You Lost!')
+                clearConsole()
+                animatedLostText()
                 break
             elif ((int(userChoiceInput[0]) in bombs) or (int(userChoiceInput[0]) not in bombs)) and userChoiceInput[1] == 'R':
                 print('| '+userChoiceInput[0]+' |')
@@ -217,7 +232,7 @@ def playgame():
                             foundedBombs.append(int(userChoiceInput[0]))
                             if len(bombs) == numberOfFoundedBombs:
                                 if set(bombs) == set(foundedBombs):
-                                    print('YOU WON!')
+                                    animatedWonText()
                                     kams = 1
                                     break
                                 
@@ -585,44 +600,92 @@ def userLoginAndRegister():
                             break
         db.close()
         return flag
+def reportAProblem(bugReport,User):
+    text = User+' said:\n'+bugReport
+
+    message = MIMEMultipart()
+    message["from"] = User
+    message["to"] = "At1X@hi2.in"
+    message["subject"] = 'Report a bug for MineSweeper v 1.0'
+    message.attach(MIMEText(text))
+    try:
+        print('Please wait...')
+        with smtplib.SMTP(host="smtp.gmail.com", port=587) as smtp:
+            smtp.ehlo()
+            smtp.starttls()
+            smtp.login("xxx469394@gmail.com", "xxx1018753")
+            smtp.send_message(message)
+            print('Sent, Thank You!')
+    except:
+        print('We cant connect to google, try again later...')
+def myMainLoad():
+    if flag:
+        clearConsole()
+        print('*** MENU ***')
+        print('select, to continue...\n1- Change Name (ch)\n2- Play (p)\n3- Report a bug (b)')
+        menuChoice = input()
+        if menuChoice == 'ch':
+            global username
+            while 1:
+                newName = input('your previous name is {}\nEnter your new name:\n'.format(username))
+                if newName:
+                    # print(username)
+                    break
+            with open('database.txt','r') as myFile:
+                lines = myFile.readlines()
+                for i in lines:
+                    if i == '{}'.format(username) or i == '{}\n'.format(username):
+                        myIndx = lines.index(i)
+                        lines[myIndx] = '{}\n'.format(newName)
+                        username = newName
+                        print('your name has changed!')
+                        print('Back to menu? type \"back\"\n')
+                        with open('database.txt','w') as secFile:
+                            for k in lines:
+                                secFile.write(k)
+                        while 1:
+                            backOption = input()
+                            if backOption == 'back':
+                                myMainLoad()
+                            else:
+                                print('Wrong value, try again...')
+                        break
+        elif menuChoice == 'p':
+            playgame()
+            while 1:
+                print("*************")
+                print("What do you want to do now?")
+                print("*************\n1- Rematch (r)\n2- Back to menu (m)\n3- Exit (e)")
+                while 1:
+                    lastChoice = input()
+                    if lastChoice == 'e':
+                        print('Sho khosh!')
+                        exit()
+                    elif lastChoice == 'r':
+                        playgame()
+                        break
+                    elif lastChoice == 'm':
+                        myMainLoad()
+                        break
+                    else:
+                        print('Wrong, try again...')
+                
+        elif menuChoice == 'b':
+            bugReport = input('Tell us what happend: (notice that your internet must be connected)\n')
+            reportAProblem(bugReport,username)
+            print('Back to menu? type \'back\'')
+            while 1:
+                backOption = input()
+                if backOption == 'back':
+                    myMainLoad()
+                    break
+                else:
+                    print('Wrong value, try again...')            
+
 clearConsole()
 userLoginAndRegister()
-# Change Name and Play Game
-if flag:
-    clearConsole()
-    print('*** MENU ***')
-    print('select, to continue...\n1- Change Name (ch)\n2- Play (p)')
-    menuChoice = input()
-    if menuChoice == 'ch':
-        while 1:
-            newName = input('Enter your new name:\n')
-            if newName:
-                print(username)
-                break
-        with open('database.txt','r') as myFile:
-            lines = myFile.readlines()
-            for i in lines:
-                if i == '{}'.format(username) or i == '{}\n'.format(username):
-                    myIndx = lines.index(i)
-                    lines[myIndx] = '{}\n'.format(newName)
-                    print('your name has changed!')
-                    with open('database.txt','w') as secFile:
-                        for k in lines:
-                            secFile.write(k)
-    elif menuChoice == 'p':
-        playgame()
-        while 1:
-            print("*************")
-            print("What do you want to do now?")
-            print("*************\n1- Rematch (r)\n2- Exit (e)")
-            lastChoice = input()
-            if lastChoice == 'e':
-                print('Sho khosh!')
-                exit()
-            elif lastChoice == 'r':
-                playgame()
-
-
+# Menu and main function
+myMainLoad()
 
 
 
