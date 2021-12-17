@@ -1,13 +1,22 @@
-import random, smtplib, sys, time, os
+import random, smtplib, sys, time, os,pickle,json, ast
 from getpass import getpass
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+def welcomeMessage():
+    print("""
+      ^~^  ,                   
+     ('Y') )                   
+     /   \/  Welcome meow
+    (\|||/)             
+
+    """)
 def animatedLostText():
     print("""
     \ \ / / / _ \ | | | |      | |    / _ \ / __||_   _|
      \   / | (_) || |_| |      | |__ | (_) |\__ \  | |  
       |_|   \___/  \___/       |____| \___/ |___/  |_|  
     """)
+    print('Your full map was:\n')
 def animatedWonText():
     print("""                                                                      
     ▀███▀   ▀██▀ ▄▄█▀▀██▄  ▀███▀   ▀███▀   ▀████▀     █     ▀███▀ ▄▄█▀▀██▄ ▀███▄   ▀███▀█ 
@@ -201,6 +210,10 @@ def playgame():
     bombs = bombPutter(mapSize)
     print(bombs)
     myMap = makeMap(mapSize)
+    mf = open('C:\scores\{}.txt'.format(username),'a+')
+    mf.write('------\n')
+    mf.write('Size: {}\n'.format(mapSize))
+    mf.write('Bombs: {}\n'.format(bombs))
     nium = 0
     numberOfFoundedBombs = 0
     kams = 0
@@ -211,6 +224,9 @@ def playgame():
             if (int(userChoiceInput[0]) in bombs) and userChoiceInput[1] == 'L':
                 clearConsole()
                 animatedLostText()
+                mapCreateForHistory(mapSize,bombs)
+                mf.write('Lost\n')
+                mf.write('Clicked bomb: {}\n'.format(int(userChoiceInput[0])))
                 break
             elif ((int(userChoiceInput[0]) in bombs) or (int(userChoiceInput[0]) not in bombs)) and userChoiceInput[1] == 'R':
                 print('| '+userChoiceInput[0]+' |')
@@ -233,11 +249,16 @@ def playgame():
                             if len(bombs) == numberOfFoundedBombs:
                                 if set(bombs) == set(foundedBombs):
                                     animatedWonText()
+                                    mapCreateForHistory(mapSize,bombs)
+                                    mf.write('Won\n')
+                                    mf.write('No bomb clicked!\n')
                                     kams = 1
                                     break
                                 
                                 else:
                                     print('Your flags finished and you LOST!')
+                                    mf.write('Lost\n')
+                                    mf.write('Finished flags\n')
                                     kams = 1
                                     break
                             else:
@@ -300,7 +321,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))            
-                    elif NUM is 101:
+                    elif NUM == 101:
                         clearConsole()
                         bombCounter = [NUM+1,NUM+mapSize,NUM+mapSize+1]
                         for bomb in bombCounter:
@@ -311,7 +332,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))            
-                    elif NUM is 109:
+                    elif NUM == 109:
                         clearConsole()
                         bombCounter = [NUM-1,NUM+mapSize,NUM+mapSize-1]
                         for bomb in bombCounter:
@@ -322,7 +343,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))
-                    elif NUM is 173:
+                    elif NUM == 173:
                         clearConsole()
                         bombCounter = [NUM+1,NUM-mapSize,NUM-mapSize+1]
                         for bomb in bombCounter:
@@ -333,7 +354,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '| ({}) |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))            
-                    elif NUM is 181:
+                    elif NUM == 181:
                         clearConsole()
                         bombCounter = [NUM-1,NUM-mapSize,NUM-mapSize-1]
                         for bomb in bombCounter:
@@ -400,7 +421,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))            
-                    elif NUM is 101:
+                    elif NUM == 101:
                         clearConsole()
                         bombCounter = [NUM+1,NUM+mapSize,NUM+mapSize+1]
                         for bomb in bombCounter:
@@ -411,7 +432,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))            
-                    elif NUM is 112:
+                    elif NUM == 112:
                         clearConsole()
                         bombCounter = [NUM-1,NUM+mapSize,NUM+mapSize-1]
                         for bomb in bombCounter:
@@ -422,7 +443,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))
-                    elif NUM is 233:
+                    elif NUM == 233:
                         clearConsole()
                         bombCounter = [NUM+1,NUM-mapSize,NUM-mapSize+1]
                         for bomb in bombCounter:
@@ -433,7 +454,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))            
-                    elif NUM is 244:
+                    elif NUM == 244:
                         clearConsole()
                         bombCounter = [NUM-1,NUM-mapSize,NUM-mapSize-1]
                         for bomb in bombCounter:
@@ -500,7 +521,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))            
-                    elif NUM is 101:
+                    elif NUM == 101:
                         clearConsole()
                         bombCounter = [NUM+1,NUM+mapSize,NUM+mapSize+1]
                         for bomb in bombCounter:
@@ -511,7 +532,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))            
-                    elif NUM is 115:
+                    elif NUM == 115:
                         clearConsole()
                         bombCounter = [NUM-1,NUM+mapSize,NUM+mapSize-1]
                         for bomb in bombCounter:
@@ -522,7 +543,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))
-                    elif NUM is 386:
+                    elif NUM == 386:
                         clearConsole()
                         bombCounter = [NUM+1,NUM-mapSize,NUM-mapSize+1]
                         for bomb in bombCounter:
@@ -533,7 +554,7 @@ def playgame():
                                 if j == '| '+str(NUM)+' |':
                                     ll[myMap.index(i)][i.index(j)] = '|  {}  |'.format(numBomb)
                                     print(makeMapByList(ll,mapSize))            
-                    elif NUM is 400:
+                    elif NUM == 400:
                         clearConsole()
                         bombCounter = [NUM-1,NUM-mapSize,NUM-mapSize-1]
                         for bomb in bombCounter:
@@ -567,7 +588,7 @@ def userLoginAndRegister():
     while "IM ALIVE":
         if flag:
             break
-        print("Welcome,\ntype whatever you want:\n1- Register (R)\n2- Login (L)\n3- Back (B)")
+        print("Welcome,\ntype whatever you want:\n1- Register (R)\n2- Login (L)")
         if not os.path.isfile('database.txt'):
             db = open('database.txt','w')
             db.close()
@@ -622,7 +643,7 @@ def myMainLoad():
     if flag:
         clearConsole()
         print('*** MENU ***')
-        print('select, to continue...\n1- Change Name (ch)\n2- Play (p)\n3- Report a bug (b)')
+        print('select, to continue...\n1- Change Name (ch)\n2- Play (p)\n3- Show History (h)\n4- Report a bug (b)')
         menuChoice = input()
         if menuChoice == 'ch':
             global username
@@ -637,6 +658,7 @@ def myMainLoad():
                     if i == '{}'.format(username) or i == '{}\n'.format(username):
                         myIndx = lines.index(i)
                         lines[myIndx] = '{}\n'.format(newName)
+                        os.rename('C:\scores\{}.txt'.format(username),'C:\scores\{}.txt'.format(newName))
                         username = newName
                         print('your name has changed!')
                         print('Back to menu? type \"back\"\n')
@@ -680,12 +702,59 @@ def myMainLoad():
                     myMainLoad()
                     break
                 else:
-                    print('Wrong value, try again...')            
+                    print('Wrong value, try again...')
+        elif menuChoice == 'h':
+            showHistory(username)
+            print('Back to menu? type \'back\'')
+            while 1:
+                backOption = input()
+                if backOption == 'back':
+                    myMainLoad()
+                    break
+                else:
+                    print('Wrong value, try again...')
+def showHistory(username):
+    try:
+        checkFile = open('C:\scores\{}.txt'.format(username))
+    except:
+        print('No history stored for you')
+    if os.path.isfile('C:\scores\{}.txt'.format(username)):
+        allLines = checkFile.readlines()
+        noom = 0
+        for i in range(len(allLines)//5):
+            # print(allLines[1+noom][6:-1])
+            THEBOMBS = ast.literal_eval(allLines[2+noom][7:-1])
+            mapCreateForHistory(int(allLines[1+noom][6:-1]),THEBOMBS)
+            print('Bombs: ',THEBOMBS)
+            print(allLines[3+noom][:-1])
+            print(allLines[4+noom][:-1])
+            print('-----------------------')
+            noom+=5
+    else:
+        print('File is not exist!')
+    # return allLines
+def mapCreateForHistory(mapSize,bombs):
+    bombs = [i-100 for i in bombs]
+    if mapSize == 9 or mapSize == 12:
+        n = 9
+        matrix = [list(range(1 + n * i, 1 + n * (i + 1))) for i in range(n)]
+        for m in matrix:
+            k = [i+100 if i not in bombs else 'BMB' for i in m]
+            print(*k)
 
+# Create folder for saving scores
+newpath = r'C:\scores' 
+if not os.path.exists(newpath):
+    os.makedirs(newpath)
+#clear consol for start
 clearConsole()
+
+#show a cat for welcome message
+welcomeMessage()
+
+#user login and register
 userLoginAndRegister()
+
+
 # Menu and main function
 myMainLoad()
-
-
-
