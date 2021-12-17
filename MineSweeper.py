@@ -210,7 +210,7 @@ def playgame():
     print('\t\t*\/ Tedad parcham haye shoma: {} *\/'.format(tedadKolParchamHa))
     print(mapShow(mapSize))
     bombs = bombPutter(mapSize)
-    print(bombs)
+    # print(bombs)
     myMap = makeMap(mapSize)
     mf = open('C:\scores\{}.txt'.format(username),'a+')
     mf.write('------\n')
@@ -609,6 +609,9 @@ def userLoginAndRegister():
                     break
                 else:
                     print('username must more than 4 and password more than 8 characters')
+            db.close()
+            return flag
+            break
         elif usChoice == 'L':
             flag = False
             db = open('database.txt','r')
@@ -621,8 +624,13 @@ def userLoginAndRegister():
                         if (allUsers[k+1] == '{}\n'.format(password)) or (allUsers[k+1] == '{}'.format(password)):
                             flag = True
                             break
-        db.close()
-        return flag
+            db.close()
+            return flag
+            break
+        else:
+
+            print('Not valid, try again...\n')
+
 def reportAProblem(bugReport,User):
     text = User+' said:\n'+bugReport
 
