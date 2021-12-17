@@ -1,7 +1,10 @@
-import random, smtplib, sys, time, os,pickle,json, ast
+# module starts
+import random, smtplib, sys, time, os, ast
 from getpass import getpass
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+# end of moduls
+
 def welcomeMessage():
     print("""
       ^~^  ,                   
@@ -94,8 +97,10 @@ def bombPutter(mapSize):
         list7 = [i+1 for i in list6]
         list8 = [i+1 for i in list7]
         list9 = [i+1 for i in list8]
+        MYLIST = [list1,list2,list3,list4,list5,list6,list7,list8,list9]
         while len(bombList) < 10:
-            selectedList = random.choice([list1,list2,list3,list4,list5,list6,list7,list8,list9])
+            selectedList = random.choice(MYLIST)
+            MYLIST.remove(selectedList)
             rep = random.randint(1,3)
             for i in range(rep):
                 selectItem = random.randint(0,8)
@@ -122,8 +127,10 @@ def bombPutter(mapSize):
         list10 = [i+1 for i in list9]
         list11 = [i+1 for i in list10]
         list12 = [i+1 for i in list11]
+        MYLIST = [list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12]
         while len(bombList) < 20:
-            selectedList = random.choice([list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12])
+            selectedList = random.choice(MYLIST)
+            MYLIST.remove(selectedList)
             rep = random.randint(1,3)
             for i in range(rep):
                 selectItem = random.randint(0,11)
@@ -153,13 +160,8 @@ def bombPutter(mapSize):
         list13 = [i+1 for i in list12]
         list14 = [i+1 for i in list13]
         list15 = [i+1 for i in list14]
-        list16 = [i+1 for i in list15]
-        list17 = [i+1 for i in list16]
-        list18 = [i+1 for i in list17]
-        list19 = [i+1 for i in list18]
-        list20 = [i+1 for i in list19]
         while len(bombList) < 40:
-            selectedList = random.choice([list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16,list17,list18,list19,list20])
+            selectedList = random.choice([list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15])
             rep = random.randint(1,3)
             for i in range(rep):
                 selectItem = random.randint(0,19)
@@ -658,10 +660,14 @@ def myMainLoad():
                     if i == '{}'.format(username) or i == '{}\n'.format(username):
                         myIndx = lines.index(i)
                         lines[myIndx] = '{}\n'.format(newName)
-                        os.rename('C:\scores\{}.txt'.format(username),'C:\scores\{}.txt'.format(newName))
+                        if os.path.isfile('C:\scores\{}.txt'.format(username)):
+                            os.rename('C:\scores\{}.txt'.format(username),'C:\scores\{}.txt'.format(newName))
+                        else:
+                            mfile = open('C:\scores\{}.txt'.format(newName),'w')
+                            mfile.close()
                         username = newName
                         print('your name has changed!')
-                        print('Back to menu? type \"back\"\n')
+                        print('Back to menu? type \"back\"')
                         with open('database.txt','w') as secFile:
                             for k in lines:
                                 secFile.write(k)
@@ -734,6 +740,7 @@ def showHistory(username):
         print('File is not exist!')
     # return allLines
 def mapCreateForHistory(mapSize,bombs):
+
     bombs = [i-100 for i in bombs]
     if mapSize == 9 or mapSize == 12:
         n = 9
@@ -741,6 +748,10 @@ def mapCreateForHistory(mapSize,bombs):
         for m in matrix:
             k = [i+100 if i not in bombs else 'BMB' for i in m]
             print(*k)
+    elif mapSize == 15:
+        print('/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/')
+        print('This item is not available, buy premium!')
+        print('/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\n')
 
 # Create folder for saving scores
 newpath = r'C:\scores' 
