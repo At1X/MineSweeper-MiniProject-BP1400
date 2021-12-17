@@ -222,7 +222,11 @@ def playgame():
     foundedBombs = []
     while 'IM ALIVE':
         userChoiceInput = input().split()
-        if userChoiceInput[0].isdigit():
+        if mapSize == 9 or mapSize == 12:
+            MAPSIZE = mapSize
+        else:
+            MAPSIZE = 20
+        if userChoiceInput[0].isdigit() and 101 <= int(userChoiceInput[0]) <= 100+(mapSize*MAPSIZE):
             if (int(userChoiceInput[0]) in bombs) and userChoiceInput[1] == 'L':
                 clearConsole()
                 animatedLostText()
@@ -630,7 +634,6 @@ def userLoginAndRegister():
         else:
 
             print('Not valid, try again...\n')
-
 def reportAProblem(bugReport,User):
     text = User+' said:\n'+bugReport
 
@@ -751,10 +754,10 @@ def mapCreateForHistory(mapSize,bombs):
 
     bombs = [i-100 for i in bombs]
     if mapSize == 9 or mapSize == 12:
-        n = 9
+        n = mapSize
         matrix = [list(range(1 + n * i, 1 + n * (i + 1))) for i in range(n)]
         for m in matrix:
-            k = [i+100 if i not in bombs else 'BMB' for i in m]
+            k = [i+100 if i not in bombs else '|_|' for i in m]
             print(*k)
     elif mapSize == 15:
         print('/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/')
